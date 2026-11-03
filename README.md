@@ -10,9 +10,22 @@ for 30 days.
 
 ---
 
+## Getting the program from GitHub (private repository)
+
+Needs **Git for Windows** (https://git-scm.com/download/win – includes Git LFS for the large model files).
+
+```
+cd /d D:\NapinoPPE
+git clone https://github.com/General117/napino-ppe-monitor.git live_environment
+```
+- `D:\NapinoPPE\live_environment` must not exist yet (or be empty) – remove an empty one first.
+- A GitHub sign-in window opens the first time (private repository).
+- **Update later:** stop the monitor (Ctrl+C), then `cd /d D:\NapinoPPE\live_environment` and `git pull`.
+  Screenshots, data, sign-in and recipients (next to `live_environment`) are not touched.
+
 ## First-time setup on the client PC
 
-1. **Extract** the package into `D:\NapinoPPE\` → `D:\NapinoPPE\live_environment\`.
+1. **Get the program** into `D:\NapinoPPE\live_environment\` (git clone above, or extract a package zip).
    The folders `screenshots`, `data` and `logs` next to it are used automatically (created if missing).
 2. Double-click `tools\CHECK_SYSTEM.bat` – checks graphics, speed, fonts, disk.
 3. Double-click `START_PPE_MONITOR.bat` – the dashboard opens in the browser.

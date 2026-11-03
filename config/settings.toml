@@ -1,0 +1,115 @@
+# =====================================================================================
+#  Napino Auto - PPE Compliance Monitor : main settings
+#  Edit with Notepad. Restart the monitor after saving (close its window, run START_PPE_MONITOR.bat).
+#  Sign-in (NVR and email passwords) and alert recipients are entered on the dashboard -> Settings.
+#  No password is stored in any file of this folder.
+#  All pixel values below refer to the 1920 x 1080 frame (the feed is normalised to this size).
+# =====================================================================================
+
+[site]
+company       = "Napino Auto"
+camera_name   = "SMT Gallery 2"
+
+[storage]
+# Kept outside the program folder so a new version can replace live_environment without losing them.
+# Relative paths are relative to the live_environment folder ("../x" = next to it). On the client PC
+# (program in D:\NapinoPPE\live_environment) they resolve to the folders shown on the right.
+# An absolute path (e.g. "E:/PPE/screenshots") can be used instead.
+screenshots_dir = "../screenshots"   # D:\NapinoPPE\screenshots  - incident screenshots, one sub-folder per day
+data_dir        = "../data"          # D:\NapinoPPE\data         - incident log, encrypted sign-in, dashboard choices
+logs_dir        = "../logs"          # D:\NapinoPPE\logs         - technical log
+
+[camera]
+# "nvr"  = live Hikvision NVR stream (normal operation)
+# "file" = play a recorded video instead (testing / demos)
+source            = "nvr"
+nvr_ip            = "172.16.16.22" # pre-filled in the dashboard sign-in form
+rtsp_port         = 554
+channel           = 13           # SMT Gallery 2 = 13th camera on the NVR (pre-filled; changeable in the sign-in form)
+stream            = "main"       # "main" (full HD, recommended) or "sub" (low resolution, lighter)
+username          = "Servlens"   # pre-filled in the dashboard sign-in form
+rtsp_transport    = "tcp"        # "tcp" is the most reliable on factory networks
+reconnect_seconds = 5            # wait before reconnecting after the stream drops
+file_path         = ""           # used only when source = "file"
+file_loop         = true
+
+[processing]
+device          = "GPU"          # "GPU" = Intel graphics (falls back to CPU automatically), or "CPU"
+detector_model  = "yolo26s"      # "yolo26s" (fast) or "yolo26m" (more accurate, ~3x slower)
+detector_conf   = 0.30           # person detection confidence threshold
+analysis_fps    = 6              # frames analysed per second while people / movement are in view
+idle_analysis_fps = 1.5          # frames analysed per second while the corridor is empty and still
+motion_threshold = 0.004         # share of pixels that must change to count as movement (wakes full rate)
+coat_checks_per_second = 3       # coat classifier runs per person per second (heaviest step)
+cpu_threads     = 0              # AI threads on CPU; 0 = automatic (half of the PC's logical cores)
+opencv_threads  = 2              # threads for image resizing / colour conversion
+priority        = "below_normal" # "below_normal" keeps the PC responsive; "normal" or "low" also possible
+hw_decode       = false          # true = decode video on the graphics chip; tools\CHECK_SYSTEM.bat says which is lighter
+
+[ppe]
+min_show_height    = 110         # px; people smaller than this (far away) are ignored
+min_judge_height   = 170         # px; below this a person shows "VERIFYING"
+smoothing_seconds  = 1.5         # evidence window per PPE item
+min_verdict_seconds = 0.5        # evidence needed before a verdict is shown
+# White cap: top of head bright and colourless
+cap_max_saturation = 24
+cap_min_brightness = 60
+# Floaters: blue/violet pixels in the bottom 10 % of the person box (OpenCV HSV units)
+floater_hue_min    = 105
+floater_hue_max    = 140
+floater_min_saturation = 40
+floater_min_brightness = 70
+floater_min_fraction   = 0.008
+
+[lock]
+# A FULL PPE verdict is locked (never re-checked) once confirmed. Partial / No-PPE are never locked.
+enabled            = true
+min_height         = 230         # px; person must be this close for the evidence to count
+confirm_seconds    = 1.0         # verdict must hold this long
+margin             = 0.25        # every item must be <= 0.25 or >= 0.75 (smoothed probability)
+
+[zones]
+# Security guard's chair beside the turnstiles: [x1, y1, x2, y2] of the box-centre zone.
+guard_zone        = [975, 160, 1110, 345]
+guard_seated_max_height = 150    # px; a seated person at the chair is shorter than anyone standing
+guard_confirm_seconds   = 1.5    # seated this long in guard_zone => this person is the guard (hidden)
+seat_zone         = [1000, 225, 1100, 305]   # seated-guard box centre: always hidden immediately
+# Glass window on the right wall mirrors the corridor: ignore boxes centred between these x values
+reflection_x      = [1290, 1450]
+
+[incidents]
+# A visit by one person is judged when they leave the view (or after max_observe_seconds).
+# An incident (screenshot + email) is raised when the visit's verdict is PARTIAL or NO PPE.
+min_close_height     = 230       # px; observations at least this close are preferred as evidence
+min_judged_seconds   = 1.0       # person must have been judged at least this long to raise an incident
+max_observe_seconds  = 25        # decide anyway after this long in view
+lost_after_seconds   = 1.5       # person counts as "left" after being unseen this long
+alert_on             = ["none", "partial"]
+# Email only when the person was seen close to the camera (>= min_close_height) at least this many
+# times; people judged only at a distance are still logged on the dashboard ("seen only at a distance").
+# Set to 0 to email every incident.
+email_min_close_observations = 3
+retention_days       = 30        # incidents (screenshots + log rows) older than this are auto-deleted
+
+[email]
+enabled         = true           # false = incidents are still logged on the dashboard, no email sent
+mode            = "smtp"         # "smtp" = send for real, "file" = write .eml files to data\outbox (testing)
+smtp_host       = "smtp.gmail.com"
+smtp_port       = 587            # 587 (STARTTLS) or 465 (SSL)
+sender_address  = "kartik.mishra@nexren.ai"   # pre-filled in the dashboard sign-in form
+sender_name     = "Napino PPE Monitor"
+# Default recipients until changed on the dashboard (first = To, the rest = Cc)
+recipients      = ["tamanna@napino.com", "anand@napino.com", "sanjay.vashistha@napino.com", "anand.sharma@napino.com"]
+subject         = "Possible PPE Non-Compliance Captured - {camera} - {time}"
+max_per_hour    = 30             # safety cap; extra incidents are logged but not emailed
+retry_attempts  = 5
+
+[security]
+credential_days = 30             # NVR / email sign-in expires after this many days (0 = never)
+
+[dashboard]
+host            = "127.0.0.1"    # "0.0.0.0" to allow other PCs on the network to view it
+port            = 8080
+stream_fps      = 10             # frames per second of the dashboard video (drawn only while it is open)
+stream_width    = 1280           # width of the video sent to the browser
+open_browser_on_start = true

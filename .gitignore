@@ -1,0 +1,14 @@
+# Run-time data - created next to / inside the program folder on each PC, never committed
+data/
+data_replay/
+logs/
+screenshots/
+dist/
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Local scratch
+*.log
+*.tmp

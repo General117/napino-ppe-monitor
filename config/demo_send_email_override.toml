@@ -1,0 +1,15 @@
+# Demo with REAL emails (developer PC only, not shipped): plays the recorded video and sends every
+# incident email through the signed-in sender to the recipients saved on the dashboard.
+# Set test recipients in Settings first. Expect about 20 emails over the 22-minute recording
+# (capped at [email] max_per_hour).
+#   runtime\python\python.exe app\run.py --config config\demo_send_email_override.toml
+[camera]
+source    = "file"
+file_path = "../2026-10-16 16-07-15.mp4"
+file_loop = false
+
+[processing]
+cpu_threads = 4          # keep the developer PC responsive
+
+[email]
+mode = "smtp"

@@ -1,0 +1,13 @@
+# Demo / test mode (developer PC only, not shipped): plays the recorded proof-of-concept video instead
+# of the NVR, and writes alert emails to <data>\outbox instead of sending them.
+#   runtime\python\python.exe app\run.py --config config\demo_override.toml
+[camera]
+source    = "file"
+file_path = "../2026-10-16 16-07-15.mp4"
+file_loop = true
+
+[processing]
+cpu_threads = 4          # keep the developer PC responsive
+
+[email]
+mode = "file"

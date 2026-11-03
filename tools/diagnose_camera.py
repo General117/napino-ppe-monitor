@@ -47,7 +47,9 @@ def main():
         return 1
 
     pw = getpass.getpass(f"  NVR password for {user} (not shown, not stored): ")
-    cred = f"{quote(user, safe='')}:{quote(pw, safe='')}@{ip}:{port}"
+    creds = [("password %-encoded", f"{quote(user, safe='')}:{quote(pw, safe='')}@{ip}:{port}")]
+    if quote(pw, safe="") != pw:
+        creds.append(("password as typed", f"{quote(user, safe='')}:{pw}@{ip}:{port}"))
     candidates = [
         (f"channel {ch} main stream", f"/Streaming/Channels/{ch}01"),
         (f"channel {ch} sub stream", f"/Streaming/Channels/{ch}02"),
@@ -56,14 +58,17 @@ def main():
         ("channel 1 main stream", "/Streaming/Channels/101"),
     ]
     found = None
-    for label, path in candidates:
-        for transport in ("tcp", "udp"):
-            print(f"         trying {label} over {transport.upper()} ...", flush=True)
+    for how, cred in creds:
+        for label, path in candidates:
+            transport = "tcp"
+            print(f"         trying {label}, {how} ...", flush=True)
             shape = try_url(f"rtsp://{cred}{path}", transport)
             if shape:
-                ok(f"VIDEO OK: {label} over {transport.upper()}  ({shape[1]}x{shape[0]})   path {path}")
-                found = found or (label, path, transport)
+                ok(f"VIDEO OK: {label}, {how}  ({shape[1]}x{shape[0]})   path {path}")
+                found = found or (f"{label}, {how}", path, transport)
                 break
+        if found:
+            break
     print()
     if not found:
         fail("No stream opened. Look at the FFmpeg lines above:")

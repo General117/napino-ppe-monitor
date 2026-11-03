@@ -132,7 +132,12 @@ def create_app(monitor):
         if not ip or not user or not pw:
             return jsonify(ok=False, message="Enter the NVR address, user name and password."), 400
         rec = {"ip": ip, "port": int(cfg.camera.rtsp_port), "username": user, "password": pw, "channel": ch}
-        ok, _ = probe_rtsp(cfg.rtsp_url(nvr=rec), cfg.camera.rtsp_transport)
+        ok = False
+        for raw in (False, True):                  # %-encoded password first, then as typed
+            rec["raw_auth"] = raw
+            ok, _ = probe_rtsp(cfg.rtsp_url(nvr=rec), cfg.camera.rtsp_transport)
+            if ok:
+                break
         if not ok:
             return jsonify(ok=False, message="Could not open the camera stream with these details "
                                               "(check address, user name, password, channel).")

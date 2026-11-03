@@ -112,7 +112,8 @@ class Config:
             return None
         ch = int(channel if channel is not None else n.get("channel", self.camera.channel))
         sub = 1 if (stream or self.camera.stream) == "main" else 2
-        pw = "****" if redact else quote(n["password"], safe="")
+        # some NVR / FFmpeg combinations only accept the password as typed (not %-encoded)
+        pw = "****" if redact else (n["password"] if n.get("raw_auth") else quote(n["password"], safe=""))
         return (f"rtsp://{quote(n['username'], safe='')}:{pw}@{n['ip']}:{int(n.get('port', self.camera.rtsp_port))}"
                 f"/Streaming/Channels/{ch}0{sub}")
 

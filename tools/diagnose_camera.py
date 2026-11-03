@@ -50,13 +50,8 @@ def main():
     creds = [("password %-encoded", f"{quote(user, safe='')}:{quote(pw, safe='')}@{ip}:{port}")]
     if quote(pw, safe="") != pw:
         creds.append(("password as typed", f"{quote(user, safe='')}:{pw}@{ip}:{port}"))
-    candidates = [
-        (f"channel {ch} main stream", f"/Streaming/Channels/{ch}01"),
-        (f"channel {ch} sub stream", f"/Streaming/Channels/{ch}02"),
-        (f"channel {ch} (hybrid NVR numbering, +32)", f"/Streaming/Channels/{ch + 32}01"),
-        (f"channel {ch} (older 'ch' URL)", f"/h264/ch{ch}/main/av_stream"),
-        ("channel 1 main stream", "/Streaming/Channels/101"),
-    ]
+    # few attempts only: Hikvision locks the login for ~30 min after repeated failures
+    candidates = [(f"channel {ch} main stream", f"/Streaming/Channels/{ch}01")]
     found = None
     for how, cred in creds:
         for label, path in candidates:
@@ -74,7 +69,7 @@ def main():
         fail("No stream opened. Look at the FFmpeg lines above:")
         info("'401 Unauthorized' = wrong password or the user has no remote live-view right")
         info("'404 Not Found'    = wrong channel number")
-        info("timeout            = network blocks RTSP media, or RTSP is restricted on the NVR")
+        info("no message/timeout = login locked after failed attempts (wait 30-60 min) or RTSP restricted")
         return 1
     label, path, transport = found
     info(f"Use: {label}. Send this result to the developer if it is not 'channel {ch} main stream'.")

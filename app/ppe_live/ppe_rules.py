@@ -15,7 +15,7 @@ import numpy as np
 from .config import FRAME_H
 
 ITEMS = ("coat", "cap", "feet")            # "feet" = floaters
-ITEM_LABELS = {"coat": "Coat", "cap": "White cap", "feet": "Blue floaters"}
+ITEM_LABELS = {"coat": "ESD Apron", "cap": "ESD Cap", "feet": "ESD Slippers"}   # names shown to users
 
 
 def status_of(flags):

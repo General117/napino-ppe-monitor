@@ -10,9 +10,9 @@ Real-time check of personnel at the assembly-shop entrance for the mandatory PPE
 
 | Item | Rule |
 |---|---|
-| Coat | any plain block colour (white, light blue, turquoise …); not a shirt, t-shirt, patterned shirt or jacket |
-| Cap | **white** cap (blue hairnets / light-blue caps do not count) |
-| Floaters | light-blue floaters |
+| ESD Apron (code: `coat`) | any plain block colour (white, light blue, turquoise …); not a shirt, t-shirt, patterned shirt or jacket |
+| ESD Cap (code: `cap`) | **white** cap (blue hairnets / light-blue caps do not count) |
+| ESD Slippers (code: `feet` / `floaters`) | light-blue slippers |
 
 Status per person: 3 items = **FULL** (green) · 2 = **PARTIAL** (amber) · 0–1 = **NO PPE** (red) ·
 not enough evidence yet = **VERIFYING** (grey). The seated security guard and reflections in the

@@ -82,7 +82,7 @@ def build_message(cfg, inc, image_bytes, recipients=None, sender=None):
 <tr><td style="padding:16px 24px"><img src="cid:{cid[1:-1]}" width="672" style="width:100%;border-radius:6px"
   alt="Screenshot of the incident"></td></tr>
 <tr><td style="padding:4px 24px 22px 24px;font-size:12px;color:#6b7280">
-  Required PPE: coat, white cap and blue floaters. This alert is generated automatically from CCTV
+  Required PPE: ESD Apron, ESD Cap and ESD Slippers. This alert is generated automatically from CCTV
   and may need manual verification. Incident ref #{inc['id']}.</td></tr>
 </table></td></tr></table></body></html>"""
     msg.add_alternative(html, subtype="html")

@@ -1,7 +1,7 @@
 # Napino Auto – PPE Compliance Monitor (live)
 
 Watches the **SMT Gallery 2** camera on the Hikvision NVR, checks every person for the required PPE
-(**coat**, **white cap**, **blue floaters**), shows the annotated live feed at **http://localhost:8080**,
+(**ESD Apron**, **ESD Cap**, **ESD Slippers**), shows the annotated live feed at **http://localhost:8080**,
 and emails a screenshot of every possible non-compliance.
 
 Everything needed is inside this folder (Python, AI models, settings). Nothing has to be installed.

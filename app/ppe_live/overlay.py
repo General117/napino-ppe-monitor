@@ -20,7 +20,7 @@ STATUS = {
     "none":    {"label": "NO PPE DETECTED",      "short": "NO PPE",      "rgb": (235, 77, 75)},
     "pending": {"label": "VERIFYING PPE",        "short": "VERIFYING",   "rgb": (180, 188, 198)},
 }
-ITEMS = ("Coat", "Cap", "Floaters")
+ITEMS = ("ESD Apron", "ESD Cap", "ESD Slippers")
 
 
 def bgr(rgb):

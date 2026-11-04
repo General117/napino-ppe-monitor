@@ -10,8 +10,8 @@ Real-time check of personnel at the assembly-shop entrance for the mandatory PPE
 
 | Item | Rule |
 |---|---|
-| ESD Apron (code: `coat`) | any plain block colour (white, light blue, turquoise …); not a shirt, t-shirt, patterned shirt or jacket |
-| ESD Cap (code: `cap`) | **white** cap (blue hairnets / light-blue caps do not count) |
+| ESD Apron (code: `coat`) | any plain block colour incl. white, off-white, blue (white, light blue, turquoise …); not a shirt, t-shirt, patterned shirt or jacket |
+| ESD Cap (code: `cap`) | white, off-white or blue cap / bouffant (since 2026-11-04; dark hair and navy caps do not count) |
 | ESD Slippers (code: `feet` / `floaters`) | light-blue slippers |
 
 Status per person: 3 items = **FULL** (green) · 2 = **PARTIAL** (amber) · 0–1 = **NO PPE** (red) ·

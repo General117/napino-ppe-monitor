@@ -51,9 +51,16 @@ min_show_height    = 110         # px; people smaller than this (far away) are i
 min_judge_height   = 170         # px; below this a person shows "VERIFYING"
 smoothing_seconds  = 1.5         # evidence window per PPE item
 min_verdict_seconds = 0.5        # evidence needed before a verdict is shown
-# White cap: top of head bright and colourless
+# ESD Cap, white / off-white: top of head bright and colourless
 cap_max_saturation = 24
 cap_min_brightness = 60
+# ESD Cap, blue (incl. blue bouffant caps): blue hue, coloured, not dark (dark hair / navy caps do not count)
+cap_blue_allowed        = true
+cap_blue_hue_min        = 95
+cap_blue_hue_max        = 130
+cap_blue_min_saturation = 35
+cap_blue_min_brightness = 60
+# ESD Apron: any plain colour (white, off-white, blue, turquoise ...) - decided by the coat classifier, not by colour
 # Floaters: blue/violet pixels in the bottom 10 % of the person box (OpenCV HSV units)
 floater_hue_min    = 105
 floater_hue_max    = 140

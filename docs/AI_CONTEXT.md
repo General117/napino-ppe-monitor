@@ -1,7 +1,7 @@
 # Context for AI assistants / developers (state on 2026-11-03)
 
 **Project:** live PPE compliance monitor for Napino Auto, camera "SMT Gallery 2" on a Hikvision NVR.
-PPE = ESD Apron (any plain colour; code name `coat`) + ESD Cap (white; `cap`) + ESD Slippers (light blue;
+PPE = ESD Apron (any plain colour; code name `coat`) + ESD Cap (white/off-white/blue; `cap`) + ESD Slippers (light blue;
 `feet`/`floaters`). Only the displayed names changed on 2026-11-04; code keys / DB columns are unchanged. 3 = full (green), 2 = partial (amber),
 0-1 = none (red). Seated security guard + glass-window reflections ignored. Full PPE locks once confirmed.
 Partial/none visit -> screenshot + Gmail SMTP alert. Dashboard http://localhost:8080 (Flask + waitress).

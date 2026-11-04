@@ -42,8 +42,13 @@ class Scorer:
         if patch.size == 0:
             return None
         hsv = cv2.cvtColor(patch, cv2.COLOR_BGR2HSV).reshape(-1, 3)
-        s, v = np.median(hsv[:, 1]), np.median(hsv[:, 2])
-        return float(_sig((self.p.cap_max_saturation - s) / 2.5) * _sig((v - self.p.cap_min_brightness) / 6))
+        hue, s, v = np.median(hsv[:, 0]), np.median(hsv[:, 1]), np.median(hsv[:, 2])
+        p = self.p
+        white = _sig((p.cap_max_saturation - s) / 2.5) * _sig((v - p.cap_min_brightness) / 6)   # white / off-white
+        blue = 0.0
+        if p.get("cap_blue_allowed", True) and p.get("cap_blue_hue_min", 95) <= hue <= p.get("cap_blue_hue_max", 130):
+            blue = _sig((s - p.get("cap_blue_min_saturation", 35)) / 5) * _sig((v - p.get("cap_blue_min_brightness", 60)) / 6)
+        return float(max(white, blue))
 
     def floaters(self, frame, b):
         x1, y1, x2, y2 = [int(v) for v in b]
